@@ -1,0 +1,1404 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>K_idols.</title>
+    <link rel="icon" type="image/png" href="./images/logo.png">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <style>
+        /* Base Page Setup */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0c0d10;
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            min-height: 100vh;
+            padding: 30px 15px;
+            overflow-x: hidden;
+        }
+
+        /* Top Banner Image */
+        #bp {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 20px;
+            margin-bottom: 50px;
+            width: 90%;
+            max-width: 1100px;
+        }
+
+        /* Fading edges on all 4 sides */
+        .fade-edges-rectangular {
+            -webkit-mask-image: 
+                linear-gradient(to right, transparent, black 15%, black 85%, transparent),
+                linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-composite: source-in;
+            
+            mask-image: 
+                linear-gradient(to right, transparent, black 15%, black 85%, transparent),
+                linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+            mask-composite: intersect;
+        }
+
+        /* Members Section Styling */
+        #title {
+            font-weight: 800;
+            margin-left: 50px;
+            text-shadow: 4px 4px 8px rgba(41, 39, 39, 0.4);
+            margin-top: 20px;
+            transition: color 0.3s ease;
+        }
+
+        #title:hover {
+            color: rgb(226, 0, 0);
+        }
+
+        .class-title {
+            font-weight: 800;
+        }
+
+        .card {
+            margin: 15px auto;
+            box-shadow: rgba(240, 46, 46, 0.4) 5px 5px, rgba(240, 46, 46, 0.3) 10px 10px, rgba(240, 46, 46, 0.2) 15px 15px, rgba(240, 46, 46, 0.1) 20px 20px, rgba(240, 46, 46, 0.05) 25px 25px;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border: none;
+        }
+
+        /* 3D Carousel Styling */
+        .carousel-container {
+            width: 100%;
+            max-width: 1100px;
+            padding: 20px;
+            margin: 80px auto 100px auto;
+        }
+
+        .carousel-container h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 800;
+        }
+
+        /* Hide radio inputs completely */
+        input[type="radio"] {
+            display: none;
+        }
+
+        /* Track holding the slides */
+        .carousel-track {
+            position: relative;
+            height: 420px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        /* Slide Styling */
+        .slide {
+            position: absolute;
+            width: 320px;
+            text-align: center;
+            transition: all 0.5s ease-in-out;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0.6);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .album-title {
+            margin-top: 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 1rem;
+            color: #888;
+            transition: color 0.4s ease;
+        }
+
+        .slide .album-link {
+            pointer-events: none; 
+            display: block;
+            text-decoration: none;
+        }
+
+        #item-1:checked ~ .carousel-track label[for="item-1"] .album-link,
+        #item-2:checked ~ .carousel-track label[for="item-2"] .album-link,
+        #item-3:checked ~ .carousel-track label[for="item-3"] .album-link,
+        #item-4:checked ~ .carousel-track label[for="item-4"] .album-link {
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        /* ACTIVE (Center) SLIDE */
+        #item-1:checked ~ .carousel-track label[for="item-1"],
+        #item-2:checked ~ .carousel-track label[for="item-2"],
+        #item-3:checked ~ .carousel-track label[for="item-3"],
+        #item-4:checked ~ .carousel-track label[for="item-4"] {
+            opacity: 1;
+            transform: translateX(0) scale(1.15);
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        #item-1:checked ~ .carousel-track label[for="item-1"] .album-title,
+        #item-2:checked ~ .carousel-track label[for="item-2"] .album-title,
+        #item-3:checked ~ .carousel-track label[for="item-3"] .album-title,
+        #item-4:checked ~ .carousel-track label[for="item-4"] .album-title {
+            color: #fff;
+        }
+
+        /* PREVIOUS (Left) SLIDE */
+        #item-1:checked ~ .carousel-track label[for="item-4"],
+        #item-2:checked ~ .carousel-track label[for="item-1"],
+        #item-3:checked ~ .carousel-track label[for="item-2"],
+        #item-4:checked ~ .carousel-track label[for="item-3"] {
+            opacity: 0.4;
+            transform: translateX(-300px) scale(0.85);
+            z-index: 5;
+            pointer-events: auto;
+        }
+
+        /* NEXT (Right) SLIDE */
+        #item-1:checked ~ .carousel-track label[for="item-2"],
+        #item-2:checked ~ .carousel-track label[for="item-3"],
+        #item-3:checked ~ .carousel-track label[for="item-4"],
+        #item-4:checked ~ .carousel-track label[for="item-1"] {
+            opacity: 0.4;
+            transform: translateX(300px) scale(0.85);
+            z-index: 5;
+            pointer-events: auto;
+        }
+
+        /* HIDDEN SLIDES */
+        #item-1:checked ~ .carousel-track label[for="item-3"],
+        #item-2:checked ~ .carousel-track label[for="item-4"],
+        #item-3:checked ~ .carousel-track label[for="item-1"],
+        #item-4:checked ~ .carousel-track label[for="item-2"] {
+            opacity: 0;
+            transform: translateX(-450px) scale(0.6);
+            z-index: 1;
+        }
+
+        /* Container & Card Framing */
+        .baemon-card-container {
+            max-width: 650px;
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(255, 0, 100, 0.15);
+            background-color: #121318;
+        }
+
+        /* Hero Banner Section */
+        .baemon-hero-banner {
+            position: relative;
+            height: 260px;
+            background: #000;
+            overflow: hidden;
+        }
+
+        @media (min-width: 576px) {
+            .baemon-hero-banner {
+                height: 280px;
+            }
+        }
+
+        .hero-bg-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .hero-overlay-content {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 2;
+        }
+
+        @media (min-width: 576px) {
+            .hero-overlay-content {
+                left: 24px;
+            }
+        }
+
+        .tour-tagline {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            color: #cccccc;
+        }
+
+        .artist-title {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin: 0;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        @media (min-width: 576px) {
+            .artist-title {
+                font-size: 38px;
+            }
+        }
+
+        .tour-name {
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 4px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        @media (min-width: 576px) {
+            .tour-name {
+                font-size: 18px;
+                margin-bottom: 12px;
+            }
+        }
+
+        .see-more-link {
+            color: #ffffff;
+            font-size: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            opacity: 0.85;
+        }
+
+        .see-more-link:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        /* Card Body Section */
+        .baemon-card-body {
+            background-color: #1b1c22;
+            padding: 24px 20px;
+        }
+
+        @media (min-width: 576px) {
+            .baemon-card-body {
+                padding: 28px 24px;
+            }
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        @media (min-width: 576px) {
+            .section-title {
+                font-size: 20px;
+            }
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            color: #9a9b9e;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 576px) {
+            .info-grid {
+                flex-direction: row;
+                gap: 12px;
+                margin-bottom: 22px;
+            }
+        }
+
+        .info-box {
+            flex: 1;
+            background-color: #262830;
+            padding: 12px 14px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 10px;
+            color: #7d7f85;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .cta-text {
+            font-size: 12px;
+            color: #cccccc;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .ticket-btn {
+            display: inline-block;
+            background-color: #ffffff;
+            color: #121318;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .ticket-btn:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-1px);
+        }
+
+        /* PURE CSS MODAL STYLING */
+        .modal-toggle {
+            display: none;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1050;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .modal-toggle:checked ~ .modal-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content-wrapper {
+            background: #1b1c22;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 1050px;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            overflow: hidden;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            margin: auto;
+        }
+
+        .modal-toggle:checked ~ .modal-overlay .modal-content-wrapper {
+            transform: translateY(0);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            background: #262830;
+            color: #fff;
+            border: none;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .modal-close-btn:hover {
+            background: #ff3366;
+            color: #fff;
+        }
+
+        /* Enhanced Form Styling */
+        .form-card {
+            background-color: #0b0b0b;
+            border: 1px solid #220000;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 0 25px rgba(220, 20, 60, 0.15), 0 10px 30px rgba(0, 0, 0, 0.8);
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .form-card {
+                padding: 35px;
+            }
+        }
+
+        .field-label {
+            display: block;
+            color: #b0b3bc;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control, textarea {
+            background-color: #262830 !important;
+            border: 1px solid #363945 !important;
+            color: #ffffff !important;
+            border-radius: 10px !important;
+            padding: 11px 15px !important;
+            font-size: 13px !important;
+            transition: border-color 0.2s, box-shadow 0.2s !important;
+            width: 100%;
+        }
+
+        .form-control::placeholder, textarea::placeholder {
+            color: #6c707e !important;
+        }
+
+        .form-control:focus, textarea:focus {
+            outline: none;
+            border-color: #ff3366 !important;
+            box-shadow: 0 0 0 3px rgba(255, 51, 102, 0.2) !important;
+            background-color: #262830 !important;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Radio Pill Styling */
+        .radio-container {
+            display: flex;
+            gap: 8px;
+        }
+
+        @media (min-width: 576px) {
+            .radio-container {
+                gap: 10px;
+            }
+        }
+
+        .radio-container input[type="radio"] {
+            display: none;
+        }
+
+        .radio-pill {
+            flex: 1;
+            text-align: center;
+            padding: 10px 8px;
+            background-color: #262830;
+            border: 1px solid #363945;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #9a9b9e;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .radio-pill:hover {
+            border-color: #525668;
+            color: #ffffff;
+        }
+
+        .radio-container input[type="radio"]:checked + .radio-pill {
+            background-color: #ff3366;
+            border-color: #ff3366;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3);
+        }
+
+        .btn-submit {
+            background-color: #ffffff;
+            color: #121318;
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            border: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .btn-submit:hover {
+            background-color: #ff3366;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+        }
+
+        /* Merchandise Section Theme */
+        .merch-card {
+            background-color: #0b0b0b;
+            border: 1px solid #220000;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            padding: 15px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .merch-card:hover {
+            border-color: #dc143c;
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(220, 20, 60, 0.3);
+        }
+
+        .merch-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .merch-info h5 {
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .merch-desc {
+            color: #888;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+        }
+
+        .price {
+            display: inline-block;
+            color: #ffffff;
+            background-color: #1a0505;
+            border: 1px solid #dc143c;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+                
+        /* FOOTER */
+        .main-footer {
+            background-color: #111;
+            color: white;
+            padding: 65px 0 20px;
+            margin-top: 80px;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo span:first-child,
+        .red-dot {
+            color: #e60026;
+        }
+
+        .footer-description {
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.9;
+            max-width: 300px;
+        }
+
+        .footer-title {
+            color: #e60026;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 15px;
+            margin-bottom: 25px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 13px;
+        }
+
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #e60026;
+            padding-left: 8px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .social-icons a {
+            color: white;
+            background-color: #292929;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            background-color: #e60026;
+            transform: translateY(-5px);
+        }
+
+        .footer-btn {
+            display: inline-block;
+            color: white;
+            background-color: #e60026;
+            padding: 11px 23px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .footer-btn:hover {
+            background-color: white;
+            color: #111;
+        }
+
+        .footer-line {
+            border-color: #444;
+            margin: 45px 0 20px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .footer-bottom span {
+            color: #e60026;
+        }
+
+        @media (max-width: 768px) {
+            .main-footer {
+                text-align: center;
+            }
+            .footer-description {
+                margin: auto;
+            }
+            .social-icons {
+                justify-content: center;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+
+         /* NAVBAR */
+.custom-navbar {
+    position: sticky; top: 0px;
+    display: block;
+    background-color: #ffffff;
+    padding: 18px 0;
+    border-bottom: 2px solid #e9e9e9;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+    z-index: 2;
+}
+
+/* LOGO */
+.navbar-brand {
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #111 !important;
+}
+
+.logo-red {
+    color: #d90429;
+    font-size: 32px;
+}
+
+.logo-dot {
+    color: #d90429;
+}
+
+/* NAV LINKS */
+.custom-navbar .nav-link {
+    color: #111 ;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 15px;
+    position: relative;
+}
+
+/* Hover Effect */
+.custom-navbar .nav-link:hover {
+    color: #d90429 ;
+}
+
+
+/* DROPDOWN */
+.dropdown-menu {
+    border: none;
+    border-top: 3px solid #d90429;
+    border-radius: 0 0 12px 12px;
+    padding: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.dropdown-item {
+    padding: 10px 15px;
+    font-weight: 500;
+}
+
+.dropdown-item:hover {
+    background-color: #fff0f2;
+    color: #d90429;
+    padding-left: 22px;
+}
+
+.dropdown-header {
+    color: #d90429;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* SHOP */
+.shop-link {
+    color: #d90429 ;
+}
+
+/* EXPLORE BUTTON */
+.nav-order-btn {
+    background-color: #d90429;
+    color: white;
+    text-decoration: none;
+    padding: 11px 23px;
+    border-radius: 30px;
+    font-weight: bold;
+    margin-left: 20px;
+    transition: 0.3s;
+}
+
+.nav-order-btn:hover {
+    background-color: #111;
+    color: white;
+}
+
+.nav-order-btn span {
+    font-size: 18px;
+}
+
+/* MOBILE */
+@media (max-width: 991px) {
+
+    .custom-navbar .nav-link {
+        margin: 8px 0;
+    }
+
+    .nav-order-btn {
+        display: inline-block;
+        margin: 15px 0;
+    }
+
+}
+
+
+
+    </style>
+  </head>
+  <body>
+
+       <nav class="navbar navbar-expand-lg custom-navbar">
+            <div class="container-fluid px-5">
+                <a class="navbar-brand" href="kpopmain.html">
+                    <span class="logo-red">K</span>POPIDOLS<span class="logo-dot">.</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html"> Home Page </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                K-pop Idols
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li><h6 class="dropdown-header">EXPLORE ARTISTS </h6></li>
+                                <li><a class="dropdown-item" href="crotis_main.html"> CORTIS </a></li>
+                                <li> <a class="dropdown-item" href="bm.html"> BABYMONSTER</a></li>
+                                <li> <a class="dropdown-item" href="https://www.beliftlab.com/artist/profile/ENHYPEN"> ENHYPEN </a></li>
+                                <li> <a class="dropdown-item" href="https://aespa.com/"> AESPA </a></li>
+                            </ul>
+                        </li>
+                        <!-- Shop -->
+                        <li class="nav-item">
+                            <a class="nav-link shop-link" href="#shop"> Shop <i class="bi bi-bag-heart"></i> </a>
+                        </li>
+                    </ul>
+                    <!-- Right Side -->
+                    <a href="https://ygfamily.com/en/artists/babymonster" class="nav-order-btn"> Explore Now </a>
+
+                </div>
+            </div>
+        </nav>
+
+
+    <!-- Top Banner -->
+    <img id="bp" src="https://i.pinimg.com/736x/89/d2/1f/89d21f04db22ab6e675b4846a86f9cb0.jpg" class="fade-edges-rectangular" alt="BABYMONSTER">
+
+    <!-- Members Section -->
+    <div class="container-fluid my-5">
+      <div class="row">
+          <div class="col-lg-3 col-md-12">
+              <h1 id="title">MEMBERS</h1>
+          </div>
+          <div class="col-lg-9 col-md-12">
+              <div class="row">
+                  <div class="col-sm-6 col-md-4 col-xl-3">
+                      <div class="card" style="width: 190px; height: 400px;">
+                          <img style="height: 220px; object-fit: cover;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfQDuUtNndYjJ0uvX5VYWZ3R1MxldtRdki0fpP7CXxLA&s=10" alt="Chiquita">
+                          <div class="card-body">
+                              <h5 class="class-title">Chiquita</h5>
+                              <p class="class-text">maknae, lead vocalist, lead dancer, and sub-rapper</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-xl-3">
+                      <div class="card" style="width: 190px; height: 400px;">
+                          <img style="height: 220px; object-fit: cover;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnrg9XIZeY0PBMbVk4uwmGlyrNQcApTkALYUj-W5mj1g&s=10" alt="Rora">
+                          <div class="card-body">
+                              <h5 class="class-title">Rora</h5>
+                              <p class="class-text">lead vocalist and visual member</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-xl-3">
+                      <div class="card" style="width: 190px; height: 400px;">
+                          <img style="height: 220px; object-fit: cover;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSf7AJBEdXubl2ppcCnl1B78uvDzh7QaS2cOmZkd10_pQ&s=10" alt="Ruka">
+                          <div class="card-body">
+                              <h5 class="class-title">Ruka</h5>
+                              <p class="class-text">Japanese rapper, dancer, and the oldest member</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-xl-3">
+                      <div class="card" style="width: 190px; height: 400px;">
+                          <img style="height: 220px; object-fit: cover;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXr0SW6iQbyaD6GVzSU-il2D3w8JmwbzHvyxS4xpE9Ww&s=10" alt="Rami">
+                          <div class="card-body">
+                              <h5 class="class-title">Rami</h5>
+                              <p class="class-text">main vocalist</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-xl-3">
+                      <div class="card" style="width: 190px; height: 400px;">
+                          <img style="height: 220px; object-fit: cover;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3ANw8YQU0ihG5tKCcqBOxtpsjSpjSPeZpK_EUSH6Ygg&s=10" alt="Pharita">
+                          <div class="card-body">
+                              <h5 class="class-title">Pharita</h5>
+                              <p class="class-text">lead vocalist, main visual, and sub-rapper</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-xl-3">
+                      <div class="card" style="width: 190px; height: 400px;">
+                          <img style="height: 220px; object-fit: cover;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBF_6E7hSCBQp9wAfP83ZOBBlp-DwD6oKCV1q5y988Og&s=10" alt="Asa">
+                          <div class="card-body">
+                              <h5 class="class-title">Asa</h5>
+                              <p class="class-text">main rapper, vocalist, and dancer</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4 col-xl-3">
+                      <div class="card" style="width: 190px; height: 400px;">
+                          <img style="height: 220px; object-fit: cover;" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQR0ZIODlpDxQqHfd937g0NMT4SO_R9A7--6t5HVcBAWw&s=10" alt="Ahyeon">
+                          <div class="card-body">
+                              <h5 class="class-title">Ahyeon</h5>
+                              <p class="class-text">singer, rapper, and dancer who is a main member</p>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Album Carousel Section -->
+    <div class="carousel-container">
+      <h2>All Albums</h2>
+
+      <!-- Radio Controllers -->
+      <input type="radio" name="slider" id="item-1">
+      <input type="radio" name="slider" id="item-2" checked>
+      <input type="radio" name="slider" id="item-3">
+      <input type="radio" name="slider" id="item-4">
+
+      <div class="carousel-track">
+        <!-- Album 1 -->
+        <label class="slide" for="item-1">
+          <a class="album-link" href="https://www.youtube.com/watch?v=naoGk-Zjc1s&list=RDnaoGk-Zjc1s&start_radio=1" target="_blank">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ2myaXegSRQPvTX1f6LeazK1UMRjOsiO_tas0-fGLxg&s=10" alt="SUGAR HONEY ICE TEA" />
+          </a>
+          <p class="album-title">SUGAR HONEY ICE TEA</p>
+        </label>
+
+        <!-- Album 2 -->
+        <label class="slide" for="item-2">
+          <a class="album-link" href="https://www.youtube.com/watch?v=x3eqqoZPV_E&list=RDx3eqqoZPV_E&start_radio=1" target="_blank">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFfnBjG8tzvEWPMz-3hID23axPMEUUClRZxrvg9ZkeEw&s=10" alt="CHOOM" />
+          </a>
+          <p class="album-title">CHOOM</p>
+        </label>
+
+        <!-- Album 3 -->
+        <label class="slide" for="item-3">
+          <a class="album-link" href="https://www.youtube.com/watch?v=wlHwjkYpSr0&list=RDwlHwjkYpSr0&start_radio=1" target="_blank">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrcgmkbp6InPhgFs70-umDxKcq3_e6-ifBUCPaZNuDdw&s=10" alt="WE GO UP" />
+          </a>
+          <p class="album-title">WE GO UP</p>
+        </label>
+
+        <!-- Album 4 -->
+        <label class="slide" for="item-4">
+          <a class="album-link" href="https://www.youtube.com/watch?v=Zp-Jhuhq0bQ&list=RDZp-Jhuhq0bQ&start_radio=1" target="_blank">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkc7gY65yui19_G7hne3sohFN0BAqVOgBGhTwiLkgIaQ&s=10" alt="DRIP" />
+          </a>
+          <p class="album-title">DRIP</p>
+        </label>
+      </div>
+    </div>
+
+    <!-- Hidden Checkbox that controls the modal state purely via CSS -->
+    <input type="checkbox" id="modal-toggle-checkbox" class="modal-toggle">
+
+    <!-- Tour Card Component -->
+    <div class="baemon-card-container">
+      <div class="baemon-hero-banner">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRL7GkM3GGiztZK3j3SbVOXM3y8mLo97tVYqP2PuNOMw&s" alt="BABYMONSTER World Tour" class="hero-bg-img" />
+        <div class="hero-overlay-content">
+          <p class="tour-tagline">UPCOMING TOUR</p>
+          <h1 class="artist-title">BABYMONSTER</h1>
+          <h2 class="tour-name">WORLD TOUR 2026</h2>
+          <label for="modal-toggle-checkbox" class="see-more-link" style="cursor: pointer;">Click to see more &rarr;</label>
+        </div>
+      </div>
+
+      <div class="baemon-card-body">
+        <h2 class="section-title">BABYMONSTER WORLD TOUR 2026</h2>
+        <p class="section-subtitle">
+          Experience BABYMONSTER live with an unforgettable night of music and performances.
+        </p>
+
+        <div class="info-grid">
+          <div class="info-box">
+            <span class="info-label">DATE</span>
+            <span class="info-value">October 25, 2026</span>
+          </div>
+          <div class="info-box">
+            <span class="info-label">LOCATION</span>
+            <span class="info-value">Seoul, South Korea</span>
+          </div>
+          <div class="info-box">
+            <span class="info-label">VENUE</span>
+            <span class="info-value">KSPO Dome</span>
+          </div>
+        </div>
+
+        <p class="cta-text">
+          Don't miss the chance to see BABYMONSTER live. Register now to secure your ticket.
+        </p>
+        <label for="modal-toggle-checkbox" class="ticket-btn w-100 text-center">
+          REGISTER FOR TICKETS &rarr;
+        </label>
+      </div>
+    </div>
+
+    <!-- PURE CSS MODAL OVERLAY -->
+    <div class="modal-overlay">
+      <div class="modal-content-wrapper">
+        <label for="modal-toggle-checkbox" class="modal-close-btn">&times;</label>
+
+        <div class="row g-0 align-items-stretch">
+            <div class="col-lg-5 d-none d-lg-flex p-0">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRL7GkM3GGiztZK3j3SbVOXM3y8mLo97tVYqP2PuNOMw&s" 
+                     alt="Concert Poster" class="w-100 h-100" style="object-fit: cover; min-height: 500px;">
+            </div>
+
+            <div class="col-lg-7">
+                <div class="form-card">
+                    <div class="mb-4">
+                        <h3 class="fw-bold fs-5 mb-1 text-white">BABYMONSTER CONCERT REGISTRATION</h3>
+                        <p class="text-secondary small mb-0">Please fill out your details below to secure your spot</p>
+                    </div>
+
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="field-label" for="name">First Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="First Name" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="field-label" for="lastname">Last Name</label>
+                                    <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Last Name" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="field-label" for="email">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="name@gmail.com" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="field-label" for="phone">Phone Number</label>
+                            <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone Number" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="field-label">Ticket Type</label>
+                            <div class="radio-container">
+                                <input type="radio" id="vip" name="ticket" value="vip" checked>
+                                <label for="vip" class="radio-pill">VIP</label>
+
+                                <input type="radio" id="general" name="ticket" value="general">
+                                <label for="general" class="radio-pill">General</label>
+
+                                <input type="radio" id="premium" name="ticket" value="premium">
+                                <label for="premium" class="radio-pill">Premium</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="field-label">Gender</label>
+                            <div class="radio-container">
+                                <input type="radio" id="male" name="gender" value="male" checked>
+                                <label for="male" class="radio-pill">Male</label>
+
+                                <input type="radio" id="female" name="gender" value="female">
+                                <label for="female" class="radio-pill">Female</label>
+
+                                <input type="radio" id="other" name="gender" value="other">
+                                <label for="other" class="radio-pill">Other</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="field-label" for="review">Special Requests</label>
+                            <textarea class="form-control" id="review" name="review" rows="2" placeholder="Any additional information..."></textarea>
+                        </div>
+
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" name="terms" required style="background-color: #262830; border-color: #363945;">
+                            <label class="form-check-label text-secondary small" for="terms">I agree to the Ticket Terms & Conditions</label>
+                        </div>
+
+                        <button type="submit" class="btn-submit">Register Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Merchandise Store Section -->
+    <div class="container-fluid px-5 my-5" id="shop">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="section-title">Official Pop-Up Merchandise</h2>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Row 1 -->
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Random Photocard">
+                    <div class="merch-info">
+                        <h5>Random Photocard</h5>
+                        <p class="merch-desc">1EA (Random out of 30EA)</p>
+                        <span class="price">HKD 55</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Trading Photocard Set">
+                    <div class="merch-info">
+                        <h5>Trading Photocard Set</h5>
+                        <p class="merch-desc">10 Packs + Special Card Set</p>
+                        <span class="price">HKD 590</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Instant Photo Set">
+                    <div class="merch-info">
+                        <h5>Instant Photo Set</h5>
+                        <p class="merch-desc">Instant Photo 12EA + Frame 2EA</p>
+                        <span class="price">HKD 110</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Poster Set">
+                    <div class="merch-info">
+                        <h5>Poster Set</h5>
+                        <p class="merch-desc">Poster 12EA Set</p>
+                        <span class="price">HKD 90</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Photocard Collect Book">
+                    <div class="merch-info">
+                        <h5>Photocard Collect Book</h5>
+                        <p class="merch-desc">Collect Book + 6EA Photocards</p>
+                        <span class="price">HKD 185</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="PVC Pouch">
+                    <div class="merch-info">
+                        <h5>PVC Pouch</h5>
+                        <p class="merch-desc">PVC Pouch 1EA + Photocard 1EA</p>
+                        <span class="price">HKD 125</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Acrylic Stand">
+                    <div class="merch-info">
+                        <h5>Acrylic Stand</h5>
+                        <p class="merch-desc">Acrylic Stand 1EA</p>
+                        <span class="price">HKD 125</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Image Picket">
+                    <div class="merch-info">
+                        <h5>Image Picket</h5>
+                        <p class="merch-desc">Image Picket 1EA (Member)</p>
+                        <span class="price">HKD 150</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Tin Case & Sticker Set">
+                    <div class="merch-info">
+                        <h5>Tin Case & Sticker Set</h5>
+                        <p class="merch-desc">Tin Case 1EA + 30EA Stickers</p>
+                        <span class="price">HKD 150</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Multi Beads Strap">
+                    <div class="merch-info">
+                        <h5>Multi Beads Strap</h5>
+                        <p class="merch-desc">Multi Beads Strap 1EA</p>
+                        <span class="price">HKD 130</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Plush Keyring">
+                    <div class="merch-info">
+                        <h5>Baby Plush Keyring</h5>
+                        <p class="merch-desc">Plush Keyring + Random PC</p>
+                        <span class="price">HKD 135</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Key Cap Keyring">
+                    <div class="merch-info">
+                        <h5>Key Cap Keyring</h5>
+                        <p class="merch-desc">Key Cap Keyring 1EA</p>
+                        <span class="price">HKD 80</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Mini Hand Strap Keyring">
+                    <div class="merch-info">
+                        <h5>Mini Hand Strap Keyring</h5>
+                        <p class="merch-desc">Strap + Random Photocard 1EA</p>
+                        <span class="price">HKD 150</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Tour Slogan Towel">
+                    <div class="merch-info">
+                        <h5>Tour Slogan Towel</h5>
+                        <p class="merch-desc">Tour Slogan Towel 1EA</p>
+                        <span class="price">HKD 125</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="Compact Mirror Case">
+                    <div class="merch-info">
+                        <h5>Compact Mirror Case</h5>
+                        <p class="merch-desc">Mirror Case 1EA + Comb 1EA</p>
+                        <span class="price">HKD 60</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="merch-card">
+                    <img src="https://dck-erp.dacangtech.com/2026/09/16/FANVIBE%E6%8C%87%E7%A4%BA%E7%89%8C_%E5%94%AE%E7%BD%84_1789526391268.jpg" alt="String Backpack">
+                    <div class="merch-info">
+                        <h5>String Backpack</h5>
+                        <p class="merch-desc">Backpack 1EA + Photocard Set</p>
+                        <span class="price">HKD 285</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <h2 class="footer-logo">
+                        <span>K</span>POPIDOLS<span class="red-dot">.</span>
+                    </h2>
+                    <p class="footer-description">
+                        Discover your favourite K-pop idols,
+                        explore their journeys, and celebrate
+                        the music that connects us all.
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="footer-title">QUICK LINKS</h5>
+                    <ul class="footer-links">
+                       <li><a href="kpopmain.html">K-pop Idols</a></li>
+                       <li><a href="bm.html">BABYMONSTER</a></li>
+                       <li><a href="#shop">Shop</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="footer-title">EXPLORE MORE</h5>
+                    <p class="footer-description">
+                        Stay connected with the latest
+                        updates, music, and exclusive
+                        collections from your favourite idols.
+                    </p>
+                    <a href="https://kpopofficial.com/" class="footer-btn">Discover More</a>
+                </div>
+            </div>
+            <hr class="footer-line">
+            <div class="footer-bottom">
+                <p>&copy; 2026 KPOPIDOLS. All Rights Reserved.</p>
+                <p>Made with <span>&hearts;</span> for K-pop lovers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+  </body>
+</html>
